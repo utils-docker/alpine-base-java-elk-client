@@ -3,8 +3,16 @@ MAINTAINER Fábio Luciano <fabioluciano@php.net>
 LABEL Description="Alpine Base"
 
 ARG timezone
+ARG admin_username
+ARG admin_password
 ENV timezone ${timezone:-"America/Sao_Paulo"}
+ENV admin_username ${admin_username:-"admin"}
+ENV admin_password ${admin_password:-"password"}
 
-RUN apk --update --no-cache add tar curl supervisor tzdata \
+#####################
+
+RUN apk --update --no-cache add supervisor tzdata sudo \
   && cp /usr/share/zoneinfo/${timezone} /etc/localtime \
-  && echo $timezone > /etc/timezone
+  && echo ${timezone} > /etc/timezone \
+  && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
+  && echo "${admin_username} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
