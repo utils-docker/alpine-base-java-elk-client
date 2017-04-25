@@ -21,7 +21,7 @@ ENV elastico_download "https://www.elastic.co/downloads/beats/"
 
 #####################
 
-RUN apk --update --no-cache add supervisor tzdata sudo \
+RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
   && cp /usr/share/zoneinfo/${timezone} /etc/localtime \
   && echo ${timezone} > /etc/timezone \
   && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
@@ -39,6 +39,7 @@ RUN for type in file packet metric heart; do \
   directory=$(tar tfz $filename --exclude '*/*'); \
   tar -xzf $filename && rm $filename && mv $directory $beat; \
 done;
+
 RUN printf "${monitor_password}\n${monitor_password}" | adduser ${monitor_username}
 
 COPY files/supervisor/* /etc/supervisor.d/
