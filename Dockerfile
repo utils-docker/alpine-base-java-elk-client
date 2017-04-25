@@ -26,10 +26,12 @@ RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
   && echo ${timezone} > /etc/timezone \
   && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
   && echo "${admin_username} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
-  && echo -e "[supervisord]\nnodaemon=true\n\n[include]\nfiles = /etc/supervisor.d/*.ini" > /etc/supervisord.conf
+  && echo -e "[supervisord]\nnodaemon=true\n\n[include]\nfiles = /etc/supervisor.d/*.ini" > /etc/supervisord.conf \
+  && mkdir /var/log/monitor
+
+WORKDIR /opt/
 
 ## Configure Beats
-
 RUN for type in file packet metric heart; do \
   beat="$type"beat; \
   link=$(curl -Ss $elastico_download$beat | grep -oE 'https://.*?linux-x86\_64\.tar\.gz' | head -n 1); \
