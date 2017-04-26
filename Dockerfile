@@ -27,7 +27,7 @@ RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
   && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
   && echo "${admin_username} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
   && echo -e "[supervisord]\nnodaemon=true\n\n[include]\nfiles = /etc/supervisor.d/*.ini" > /etc/supervisord.conf \
-  && mkdir /var/log/monitor
+  && mkdir /var/log/monitor /opt/monitor
 
 WORKDIR /opt/
 
@@ -39,7 +39,7 @@ RUN for type in file packet metric heart; do \
   echo 'Downloading file '$filename; \
   curl -Ss $link > $filename; \
   directory=$(tar tfz $filename --exclude '*/*'); \
-  tar -xzf $filename && rm $filename && mv $directory $beat; \
+  tar -xzf $filename && rm $filename && mv $directory ./monitor/$beat; \
 done;
 
 RUN printf "${monitor_password}\n${monitor_password}" | adduser ${monitor_username}
