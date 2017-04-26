@@ -27,7 +27,7 @@ RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
   && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
   && echo "${admin_username} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
   && echo -e "[supervisord]\nnodaemon=true\n\n[include]\nfiles = /etc/supervisor.d/*.ini" > /etc/supervisord.conf \
-  && mkdir /var/log/monitor /opt/monitor
+  && mkdir -p /var/log/monitor /opt/monitor
 
 WORKDIR /opt/
 
