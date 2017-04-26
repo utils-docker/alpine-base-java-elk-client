@@ -1,4 +1,4 @@
-name: $hostname
+name: ${hostname}
 metricbeat.modules:
 - module: system
   metricsets:
@@ -17,6 +17,5 @@ metricbeat.modules:
   processes: ['.*']
 
 output.logstash:
-  hosts: [$logstash_host]
-
-logging.to_files: false
+  enabled: true
+  hosts: ${logstash_host}

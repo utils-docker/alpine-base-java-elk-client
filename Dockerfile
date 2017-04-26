@@ -48,8 +48,12 @@ done;
 RUN printf "${monitor_password}\n${monitor_password}" | adduser ${monitor_username}
 
 COPY files/beats/filebeat.yml /opt/monitor/filebeat/
-COPY files/beats/filebeat.yml /opt/monitor/filebeat/
-
+COPY files/beats/heartbeat.yml /opt/monitor/heartbeat/
+COPY files/beats/metricbeat.yml /opt/monitor/metricbeat/
+COPY files/beats/packetbeat.yml /opt/monitor/packetbeat/
 COPY files/supervisor/* /etc/supervisor.d/
+
+RUN chmod go-w /opt/monitor/filebeat/filebeat.yml /opt/monitor/heartbeat/heartbeat.yml /opt/monitor/metricbeat/metricbeat.yml /opt/monitor/packetbeat/packetbeat.yml
+
 
 ENTRYPOINT ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf", "-j", "/tmp/supervisord.pid", "-l", "/var/log/supervisord.log"]
