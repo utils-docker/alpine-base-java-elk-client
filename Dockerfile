@@ -19,6 +19,9 @@ ENV monitor_password ${monitor_password:-"password"}
 
 ENV elastico_download "https://www.elastic.co/downloads/beats/"
 
+ARG logstash_host
+ENV logstash_host ${logstash_host:-"http://logstash.devops"}
+
 #####################
 
 RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
@@ -43,6 +46,9 @@ RUN for type in file packet metric heart; do \
 done;
 
 RUN printf "${monitor_password}\n${monitor_password}" | adduser ${monitor_username}
+
+COPY files/beats/filebeat.yml /opt/monitor/filebeat/
+COPY files/beats/filebeat.yml /opt/monitor/filebeat/
 
 COPY files/supervisor/* /etc/supervisor.d/
 

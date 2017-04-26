@@ -1,0 +1,22 @@
+name: $hostname
+metricbeat.modules:
+- module: system
+  metricsets:
+    - cpu
+    - load
+    - core
+    - diskio
+    - filesystem
+    - fsstat
+    - memory
+    - network
+    - process
+    - socket
+  enabled: true
+  period: 10s
+  processes: ['.*']
+
+output.logstash:
+  hosts: [$logstash_host]
+
+logging.to_files: false

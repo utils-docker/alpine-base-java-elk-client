@@ -1,0 +1,5 @@
+name: $hostname
+output.logstash:
+  enabled: true
+  hosts: [$logstash_host]
+logging.to_files: false
