@@ -19,14 +19,15 @@ ENV monitor_password ${monitor_password:-"password"}
 
 ENV elastico_download "https://www.elastic.co/downloads/beats/"
 
-ARG elk_logstash
-ENV elk_logstash ${elk_logstash:-"http://logstash.devops"}
+ARG elk_elasticsearch
+ENV elk_elasticsearch ${elk_elasticsearch:-"http://172.18.0.10:9200"}
 
-ARG elk_elasticsearh
-ENV elk_elasticsearh ${elk_elasticsearh:-"http://elasticsearch.devops"}
+ARG elk_logstash
+ENV elk_logstash ${elk_logstash:-"172.18.0.11:5044"}
 
 ARG elk_kibana
-ENV elk_kibana ${elk_kibana:-"http://kibana.devops"}
+ENV elk_kibana ${elk_kibana:-"http://172.18.0.12:5601"}
+
 
 #####################
 
@@ -36,8 +37,13 @@ RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
   && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
   && echo "${admin_username} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
   && echo -e "[supervisord]\nnodaemon=true\n\n[include]\nfiles = /etc/supervisor.d/*.ini" > /etc/supervisord.conf \
-  && mkdir -p /var/log/monitor /opt/monitor
-
+  && mkdir -p \
+    /var/log/monitor/filebeat \
+    /var/log/monitor/packetbeat \
+    /var/log/monitor/metricbeat \
+    /var/log/monitor/heartbeat \
+    /opt/monitor
+    
 WORKDIR /opt/
 
 ## Configure Beats
