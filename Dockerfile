@@ -19,8 +19,14 @@ ENV monitor_password ${monitor_password:-"password"}
 
 ENV elastico_download "https://www.elastic.co/downloads/beats/"
 
-ARG logstash_host
-ENV logstash_host ${logstash_host:-"http://logstash.devops"}
+ARG elk_logstash
+ENV elk_logstash ${elk_logstash:-"http://logstash.devops"}
+
+ARG elk_elasticsearh
+ENV elk_elasticsearh ${elk_elasticsearh:-"http://elasticsearch.devops"}
+
+ARG elk_kibana
+ENV elk_kibana ${elk_kibana:-"http://kibana.devops"}
 
 #####################
 
@@ -53,7 +59,8 @@ COPY files/beats/metricbeat.yml /opt/monitor/metricbeat/
 COPY files/beats/packetbeat.yml /opt/monitor/packetbeat/
 COPY files/supervisor/* /etc/supervisor.d/
 
-RUN chmod go-w /opt/monitor/filebeat/filebeat.yml /opt/monitor/heartbeat/heartbeat.yml /opt/monitor/metricbeat/metricbeat.yml /opt/monitor/packetbeat/packetbeat.yml
+COPY files/supervisord.conf /etc/
 
+RUN chmod go-w /opt/monitor/filebeat/filebeat.yml /opt/monitor/heartbeat/heartbeat.yml /opt/monitor/metricbeat/metricbeat.yml /opt/monitor/packetbeat/packetbeat.yml
 
 ENTRYPOINT ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf", "-j", "/tmp/supervisord.pid", "-l", "/var/log/supervisord.log"]

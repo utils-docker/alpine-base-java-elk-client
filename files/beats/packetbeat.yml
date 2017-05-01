@@ -46,4 +46,4 @@ packetbeat.protocols.nfs:
 
 output.logstash:
   enabled: true
-  hosts: ${logstash_host}
+  hosts: ${elk_logstash}
