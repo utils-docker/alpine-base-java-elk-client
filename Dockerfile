@@ -31,7 +31,7 @@ ENV elk_kibana ${elk_kibana:-"http://172.18.0.12:5601"}
 
 #####################
 
-RUN apk --update --no-cache add supervisor curl tzdata sudo tar \
+RUN apk --update --no-cache add supervisor curl tzdata sudo tar certbot \
   && cp /usr/share/zoneinfo/${timezone} /etc/localtime \
   && echo ${timezone} > /etc/timezone \
   && printf "${admin_password}\n${admin_password}" | adduser ${admin_username} \
